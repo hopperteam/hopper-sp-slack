@@ -3,24 +3,30 @@
 ### Workflow
 #### On Startup  
 1. Register Service Provider  
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/RegisterServiceProvider.svg "Register Service Provider")  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/RegisterServiceProvider.svg "Register Service Provider")  
 2. Get Workspace Data
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/GetWorkspaceData.svg "Get Workspace Data")   
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/GetWorkspaceData.svg "Get Workspace Data")   
 #### Listening To Events  
 1. User Subscription (home tab unsubscibed view)  
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/UserSubscription.svg "User Subscription")  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/UserSubscription.svg "User Subscription")  
 2. User Log Off (home tab subscibed view)  
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/UserLogOff.svg "User Log Off")   
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/UserLogOff.svg "User Log Off")   
 3. Message Received  
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/MessageReceived.svg "Message Received")  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/MessageReceived.svg "Message Received")  
 4. Change User Data  
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/ChangeUserData.svg "Change User Data")  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/ChangeUserData.svg "Change User Data")  
 5. New User Joined Workspace  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/NewUserJoinedWorkspace.svg "New User Joined Workspace")  
 6. Channel Name Changed  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/ChannelNameChanged.svg "Channel Name Changed")  
 7. Channel Created  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/ChannelCreated.svg "Channel Created")  
 8. Channel Deleted  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/ChannelDeleted.svg "Channel Deleted")  
 9. User Joined Channel  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/UserJoinedChannel.svg "User Joined Channel")  
 10. User Left Channel  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/doc/UserLeftChannel.svg "User Left Channel")  
 
 ### API
 #### Slack Home Tab
