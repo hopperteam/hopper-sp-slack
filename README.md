@@ -22,6 +22,7 @@
 Get limitation warning: https://api.slack.com/events/app_rate_limited
 #### Slack Web API  
 Get list of users: https://api.slack.com/methods/users.list
+Get list of channels: https://api.slack.com/methods/conversations.list
 #### Hopper API  
 https://developer.hoppercloud.net/
 
