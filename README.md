@@ -3,7 +3,9 @@
 ### Workflow
 #### On Startup
 1. Register Service Provider
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/RegisterServiceProvider.svg "Register Service Provider")  
 2. Get Workspace Data
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/GetWorkspaceData.svg "Get Workspace Data")   
 #### Listen for Events
 1. User Subscription
 2. User Unsubscribe
