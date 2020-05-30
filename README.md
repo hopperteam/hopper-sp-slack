@@ -6,16 +6,17 @@
 2. Get Workspace Data
 #### Listen for Events
 1. User Subscription
-2. Message Received  
+2. User Unsubscribe
+3. Message Received  
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/MessageReceived.svg "Message Received")
-3. Change User Data
+4. Change User Data
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/ChangeUserData.svg "Change User Data")
-4. New User joined
-5. User Left
-6. Channel Name Changed  
+5. New User joined
+6. User Left
+7. Channel Name Changed  
 ![alt text](https://github.com/hopperteam/hopper-sp-slack/blob/master/ChannelNameChanged.svg "Channel Name Changed")
-7. Channel Added
-8. Channel Deleted
+8. Channel Added
+9. Channel Deleted
 
 ### API
 #### Slack Event API
