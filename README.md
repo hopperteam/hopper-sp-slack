@@ -19,7 +19,9 @@
 
 ### API
 #### Slack Event API
-#### Slack Web API
+Get limitation warning: https://api.slack.com/events/app_rate_limited
+#### Slack Web API  
+Get list of users: https://api.slack.com/methods/users.list
 #### Hopper API  
 https://developer.hoppercloud.net/
 
