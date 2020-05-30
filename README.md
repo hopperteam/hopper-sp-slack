@@ -19,14 +19,14 @@
 9. Channel Deleted
 
 ### API
-### Slack Home Tab
+#### Slack Home Tab
 https://api.slack.com/surfaces/tabs/using
 #### Slack Event API
 Get limitation warning: https://api.slack.com/events/app_rate_limited
 #### Slack Web API  
-Get list of users: https://api.slack.com/methods/users.list
-Get list of channels: https://api.slack.com/methods/conversations.list
-Redirects and linking: https://api.slack.com/reference/deep-linking
+Get list of users: https://api.slack.com/methods/users.list  
+Get list of channels: https://api.slack.com/methods/conversations.list  
+Redirects and linking: https://api.slack.com/reference/deep-linking  
 #### Hopper API  
 https://developer.hoppercloud.net/
 
