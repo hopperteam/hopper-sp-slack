@@ -14,11 +14,9 @@
 3. Message Received  
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/MessageReceived.svg "Message Received")
 4. Change User Data
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/ChangeUserData.svg "Change User Data")
 5. New User joined workspace
 6. User Left workspace (delete corresponding subscription)
 7. Channel Name Changed  
-![alt text](https://github.com/hopperteam/hopper-sp-slack/blob/master/ChannelNameChanged.svg "Channel Name Changed")
 8. Channel Added
 9. Channel Deleted
 10. User joined channel
