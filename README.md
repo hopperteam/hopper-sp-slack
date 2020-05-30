@@ -7,8 +7,8 @@
 2. Get Workspace Data
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/GetWorkspaceData.svg "Get Workspace Data")   
 #### Listening To Events  
-1. User Subscription
-2. User Unsubscribe
+1. User Subscription (home tab unsubscibed view)  
+2. User Unsubscribe (home tab subscibed view)  
 3. Message Received  
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/MessageReceived.svg "Message Received")
 4. Change User Data
