@@ -30,9 +30,9 @@ Get limitation warning: https://api.slack.com/events/app_rate_limited
 Handle messages tutorial: https://slack.dev/node-slack-sdk/events-api
 #### Slack Web API  
 Get list of users: https://api.slack.com/methods/users.list  
-Get list of channels: https://api.slack.com/methods/conversations.list
-Get members of channels: https://api.slack.com/methods/conversations.members
-Redirects and linking: https://api.slack.com/reference/deep-linking  
+Get list of channels: https://api.slack.com/methods/conversations.list  
+Get members of channels: https://api.slack.com/methods/conversations.members  
+Redirects and linking: https://api.slack.com/reference/deep-linking    
 #### Hopper API  
 https://developer.hoppercloud.net/
 
