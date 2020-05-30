@@ -1,8 +1,8 @@
 # hopper-sp-slack
 ## Design
 ### Workflow
-#### On Startup
-1. Register Service Provider
+#### On Startup  
+1. Register Service Provider  
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/RegisterServiceProvider.svg "Register Service Provider")  
 2. Get Workspace Data
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/GetWorkspaceData.svg "Get Workspace Data")   
@@ -12,22 +12,29 @@
 2. User Log Off (home tab subscibed view)  
 ![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/UserLogOff.svg "User Log Off")   
 3. Message Received  
-![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/MessageReceived.svg "Message Received")
-4. Change User Data
-5. New User joined workspace
-6. User Left workspace (delete corresponding subscription)
-7. Channel Name Changed  
-8. Channel Added
-9. Channel Deleted
-10. User joined channel
-11. User left channel
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/MessageReceived.svg "Message Received")  
+4. Change User Data  
+![alt text](https://raw.githubusercontent.com/hopperteam/hopper-sp-slack/master/ChangeUserData.svg "Change User Data")  
+5. New User Joined Workspace  
+6. Channel Name Changed  
+7. Channel Created  
+8. Channel Deleted  
+9. User Joined Channel  
+10. User Left Channel  
 
 ### API
 #### Slack Home Tab
 https://api.slack.com/surfaces/tabs/using
 #### Slack Event API
 Get limitation warning: https://api.slack.com/events/app_rate_limited  
-Handle messages tutorial: https://slack.dev/node-slack-sdk/events-api
+Handle messages tutorial: https://slack.dev/node-slack-sdk/events-api  
+User data update event: https://api.slack.com/events/user_change  
+User joined workspace event: https://api.slack.com/events/team_join  
+Channel name changed event: https://api.slack.com/events/channel_rename  
+Channel created event: https://api.slack.com/events/channel_created  
+Channel deleted event: https://api.slack.com/events/channel_deleted  
+User joined channel: https://api.slack.com/events/member_joined_channel  
+User left channel: https://api.slack.com/events/member_left_channel  
 #### Slack Web API  
 Get list of users: https://api.slack.com/methods/users.list  
 Get list of channels: https://api.slack.com/methods/conversations.list  
