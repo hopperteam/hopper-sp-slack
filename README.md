@@ -26,7 +26,7 @@
 #### Slack Home Tab
 https://api.slack.com/surfaces/tabs/using
 #### Slack Event API
-Get limitation warning: https://api.slack.com/events/app_rate_limited
+Get limitation warning: https://api.slack.com/events/app_rate_limited  
 Handle messages tutorial: https://slack.dev/node-slack-sdk/events-api
 #### Slack Web API  
 Get list of users: https://api.slack.com/methods/users.list  
