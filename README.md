@@ -26,4 +26,6 @@ Get list of channels: https://api.slack.com/methods/conversations.list
 #### Hopper API  
 https://developer.hoppercloud.net/
 
+### Types
+
 ## Deployment
