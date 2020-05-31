@@ -8,6 +8,7 @@ import (
 	"time"
 	"sp-slack/config"
 	"sp-slack/logger"
+    "sp-slack/handler"
 )
 
 func main() {
@@ -17,6 +18,8 @@ func main() {
     if err != nil {
         logger.Fatal(err)
     }
+
+    handler.RegisterRoutes()
 
     server := createServer()
     // will terminate with interrupt signal
