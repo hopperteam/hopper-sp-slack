@@ -12,12 +12,7 @@ import (
 )
 
 func main() {
-	var err error
-
-	err = config.Init()
-	if err != nil {
-		logger.Fatal(err)
-	}
+	config.Init()
 
 	handler.RegisterRoutes()
 

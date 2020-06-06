@@ -1,8 +1,8 @@
 package config
 
 import (
-	"errors"
 	"os"
+	"sp-slack/logger"
 )
 
 var Port string
@@ -14,19 +14,21 @@ var BaseUrl string
 
 var SlackApi string
 
-func Init() error {
-	Port = os.Getenv("PORT")
+func Init() {
+	Port = getStr("PORT")
 
-	ClientId = os.Getenv("CLIENT_ID")
-	ClientSecret = os.Getenv("CLIENT_SECRET")
-	Secret = os.Getenv("SIGNING_SECRET")
-	BaseUrl = os.Getenv("BASE_URL")
+	ClientId = getStr("CLIENT_ID")
+	ClientSecret = getStr("CLIENT_SECRET")
+	Secret = getStr("SIGNING_SECRET")
+	BaseUrl = getStr("BASE_URL")
 
-	SlackApi = os.Getenv("SLACK_API")
+	SlackApi = getStr("SLACK_API")
+}
 
-	if Port == "" || ClientId == "" || ClientSecret == "" || Secret == "" || BaseUrl == "" || SlackApi == "" {
-		return errors.New("config incomplete")
+func getStr(key string) string {
+	val := os.Getenv(key)
+	if val == "" {
+		logger.Fatalf("required env %s not specified", key)
 	}
-
-	return nil
+	return val
 }
