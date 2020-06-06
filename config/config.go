@@ -7,6 +7,9 @@ import (
 
 var Port string
 
+var DbConStr string
+var DbName string
+
 var ClientId string
 var ClientSecret string
 var Secret string
@@ -16,6 +19,9 @@ var SlackApi string
 
 func Init() {
 	Port = getStr("PORT")
+
+	DbConStr = getStr("DB_CONNECTION_STRING")
+	DbName = getStr("DB_NAME")
 
 	ClientId = getStr("CLIENT_ID")
 	ClientSecret = getStr("CLIENT_SECRET")
