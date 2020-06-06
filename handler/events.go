@@ -6,7 +6,6 @@ import (
 	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 	"net/http"
-	"os"
 	"sp-slack/config"
 	"sp-slack/logger"
 )
@@ -33,12 +32,31 @@ func HandleEvents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func parseEvent(r *http.Request) (body string, event slackevents.EventsAPIEvent, err error) {
+func parseEvent(r *http.Request) (string, slackevents.EventsAPIEvent, error) {
+	var verifier slack.SecretsVerifier
+	var body string
+	var event = slackevents.EventsAPIEvent{}
+	var err error
+
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(r.Body)
 	body = buf.String()
-	eventsAPIEvent, err := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionVerifyToken(&slackevents.TokenComparator{VerificationToken: config.Token}))
-	return body, eventsAPIEvent, err
+
+	verifier, err = slack.NewSecretsVerifier(r.Header, config.Secret)
+	if err != nil {
+		return body, event, err
+	}
+	_, err = verifier.Write([]byte(body))
+	if err != nil {
+		return body, event, err
+	}
+	err = verifier.Ensure()
+	if err != nil {
+		return body, event, err
+	}
+
+	event, err = slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionNoVerifyToken())
+	return body, event, err
 }
 
 func handleUrlVerification(body string, w http.ResponseWriter) {
