@@ -1,24 +1,32 @@
 package config
 
 import (
-	"fmt"
+	"errors"
 	"os"
-	"sp-slack/logger"
 )
 
-var Port string 
-var Signature string
+var Port string
+
+var ClientId string
+var ClientSecret string
+var Token string
+var BaseUrl string
+
+var SlackApi string
 
 func Init() error {
-    var err error
-    Port = os.Getenv("PORT")
-    Signature = os.Getenv("SIGNATURE")
+	Port = os.Getenv("PORT")
 
-    logger.Infof("using %s and %s", Port, Signature)
-    if Port == "" || Signature == "" {
-        return fmt.Errorf("config incomplete")
-    }
+	ClientId = os.Getenv("CLIENT_ID")
+	ClientSecret = os.Getenv("CLIENT_SECRET")
+	Token = os.Getenv("VERIFICATION_TOKEN")
+	BaseUrl = os.Getenv("BASE_URL")
 
-    return err
+	SlackApi = os.Getenv("SLACK_API")
+
+	if Port == "" || ClientId == "" || ClientSecret == "" || Token == "" || BaseUrl == "" || SlackApi == "" {
+		return errors.New("config incomplete")
+	}
+
+	return nil
 }
-
