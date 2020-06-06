@@ -5,14 +5,20 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"time"
 	"sp-slack/config"
 	"sp-slack/handler"
 	"sp-slack/logger"
-	"time"
+	"sp-slack/db"
+	"sp-slack/hopper"
 )
 
 func main() {
 	config.Init()
+
+	db.ConnectDB()
+	
+	hopper.InitApi()
 
 	handler.RegisterRoutes()
 
