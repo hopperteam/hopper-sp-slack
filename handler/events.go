@@ -12,7 +12,7 @@ import (
 
 func HandleEvents(w http.ResponseWriter, r *http.Request) {
 	logger.Info("event triggered")
-	body, eventsAPIEvent, err := parseEvent(r)
+	eventsAPIEvent, err := parseEvent(r)
 	if err != nil {
 		logger.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -20,7 +20,7 @@ func HandleEvents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if eventsAPIEvent.Type == slackevents.URLVerification {
-		handleUrlVerification(body, w)
+		handleUrlVerification(eventsAPIEvent, w)
 		return
 	}
 
@@ -30,29 +30,30 @@ func HandleEvents(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func parseEvent(r *http.Request) (string, slackevents.EventsAPIEvent, error) {
+func parseEvent(r *http.Request) (slackevents.EventsAPIEvent, error) {
+	var event = slackevents.EventsAPIEvent{}
 	if !isFromSlack(r) {
-		return "", slackevents.EventsAPIEvent{}, notFromSlack
+		return event, notFromSlack
 	}
 
 	body, err := utils.MvReqBodyToStr(r)
 	if err != nil {
-		return body, slackevents.EventsAPIEvent{}, err
+		return event, err
 	}
-	event, err := slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionNoVerifyToken())
-	return body, event, err
+
+	event, err = slackevents.ParseEvent(json.RawMessage(body), slackevents.OptionNoVerifyToken())
+	return event, err
 }
 
-func handleUrlVerification(body string, w http.ResponseWriter) {
+func handleUrlVerification(event slackevents.EventsAPIEvent, w http.ResponseWriter) {
 	logger.Info("verifying url")
-	var res *slackevents.ChallengeResponse
-	err := json.Unmarshal([]byte(body), &res)
-	if err != nil {
-		logger.Error(err)
+	uvEvent, ok := event.Data.(*slackevents.EventsAPIURLVerificationEvent)
+	if !ok {
+		logger.Error("did not contain the expected event")
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-Type", "text")
-	w.Write([]byte(res.Challenge))
+	w.Write([]byte(uvEvent.Challenge))
 }
 
 func handleInnerEvent(event slackevents.EventsAPIInnerEvent) {
