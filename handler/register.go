@@ -2,12 +2,11 @@ package handler
 
 import (
 	"net/http"
-	"sp-slack/logger"
 )
 
 func RegisterRoutes() {
-    http.HandleFunc("/", func (w http.ResponseWriter, r * http.Request) {
-        logger.Info("ping")
-    })
+	http.HandleFunc("/events", HandleEvents)
+	http.HandleFunc("/button", AddToSlack)
+	http.HandleFunc("/redirect", Redirect)
+	http.HandleFunc("/", Ping)
 }
-
