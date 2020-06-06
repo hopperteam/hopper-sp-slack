@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	inf = "[INFO ] "
-	war = "[WARN ] "
-	err = "[ERROR] "
-	fat = "[FATAL] "
-	que = "[QUERY] "
-	maxFileLength = 25
+	inf               = "[INFO ] "
+	war               = "[WARN ] "
+	err               = "[ERROR] "
+	fat               = "[FATAL] "
+	que               = "[QUERY] "
+	maxFileLength     = 25
 	maxFunctionLength = 20
 	// length of padding needs to be >= max(maxFileLength, maxFunctionLength)
 	// enables use of fancy slicing, too lazy to use array...
