@@ -20,6 +20,7 @@ func Redirect(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Error(err)
 		w.Write([]byte(err.Error()))
+		return
 	}
 	logger.Infof("access token for team %s with scopes %s : %s", response.Team.ID, response.Scope, response.AccessToken)
 	w.Write([]byte("Top"))
