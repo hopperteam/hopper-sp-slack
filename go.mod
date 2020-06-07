@@ -3,6 +3,7 @@ module sp-slack
 go 1.14
 
 require (
+	github.com/gorilla/schema v1.1.0
 	github.com/hopperteam/hopper-api/golang v0.0.0-20200606205507-19f26190eb0d
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/slack-go/slack v0.6.5
