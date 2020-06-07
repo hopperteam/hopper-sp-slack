@@ -13,21 +13,19 @@ var appId string
 
 type app struct {
 	Id primitive.ObjectID `bson:"_id"`
+	StrRep string `bson:"strRep"`
 }
 
-func CreateApp(id string) {
+func CreateApp(strRep string) {
 	ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
-	
-	objId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		logger.Fatalf("received invalid id, please contact hopper")
-	}
 
 	a := app{
-		Id: objId,
+		StrRep: strRep,
 	}
-	_, err = appCollection.InsertOne(ctx, a)
-	logger.Fatalf("could not persist app: %s", err.Error())
+	_, err := appCollection.InsertOne(ctx, a)
+	if err != nil {
+		logger.Fatalf("could not persist app: %s", err.Error())
+	}
 }
 
 func GetApp() (string, error) {
@@ -38,5 +36,5 @@ func GetApp() (string, error) {
 	if err != nil && !strings.Contains(err.Error(), "mongo: no documents in result") {
 		logger.Fatal(err)
 	}
-	return a.Id.Hex(), err
+	return a.StrRep, err
 }
