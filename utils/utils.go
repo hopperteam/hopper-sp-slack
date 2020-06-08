@@ -28,3 +28,12 @@ func CpReqBodyToStr(r *http.Request) (string, error) {
 	r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 	return string(body), err
 }
+
+func SendEquemeral(text string, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(struct {
+		Text string `json:"text"`
+	}{
+		Text: text,
+	})
+}

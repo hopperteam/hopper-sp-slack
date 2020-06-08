@@ -4,26 +4,80 @@ import (
 	"net/http"
 	"github.com/slack-go/slack"
 	"sp-slack/logger"
+	"sp-slack/hopper"
+	"sp-slack/utils"
+	"sp-slack/db"
 )
 
-func Subscribe(w http.ResponseWriter, r *http.Request) {
-	logger.Info("subscribe endpoint hit")
+var genericError string = "an error occured"
+
+func HandleCommand(w http.ResponseWriter, r *http.Request) {
+	logger.Info("subscription endpoint hit")
 	s, err := parseCommand(r)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
-	logger.Info(s.UserID)
+
+	user, err := db.SelectUser(s.UserID)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	
+	switch s.Command {
+	case "/subscribe":
+		subscribe(user, w)
+		break
+	case "/unsubscribe":
+		subscribe(user, w)
+		break
+	default:
+		logger.Warnf("received unsupported command %s", s.Command)
+	}
 }
 
-func Unsubscribe(w http.ResponseWriter, r *http.Request) {
-	logger.Info("unsubscribe endpoint hit")
-	s, err := parseCommand(r)
+func Callback(w http.ResponseWriter, r *http.Request) {
+	sub, err := hopper.ParseSubscribeResponse(r)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
-	logger.Info(s.UserID)
+
+	if hasUserActiveSubscription(sub.UserId) {
+		// inform user that they need only one
+		// or delete created subscription
+		return
+	}
+
+
+	err = db.AddSubscriptionToUser(sub.UserId, sub.SubscriptionId)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
+	w.Write([]byte("Top"))
+}
+
+func subscribe(user *db.User, w http.ResponseWriter) {
+	url, err := hopper.CreateSubscribeRequest(user.SlackId, user.Name)
+	if err != nil {
+		logger.Error(err)
+		url = genericError
+	}
+
+	utils.SendEquemeral(url, w)
+}
+
+func unsubscribe(user *db.User, w http.ResponseWriter) {
+	msg := "successfully unsubscribed"
+	err := db.RemoveSubscriptionFromUser(user.SlackId)
+	if err != nil {
+		logger.Error(err)
+		msg = genericError
+	}
+	utils.SendEquemeral(msg, w)
 }
 
 func parseCommand(r *http.Request) (slack.SlashCommand, error) {
@@ -32,4 +86,17 @@ func parseCommand(r *http.Request) (slack.SlashCommand, error) {
 	}
 
 	return slack.SlashCommandParse(r)
+}
+
+func hasUserActiveSubscription(slackId string) bool {
+	user, err := db.SelectUser(slackId)
+	if err != nil {
+		logger.Error(err)
+		return true
+	}
+	if user.HasSubscription() {
+		logger.Warn("has active subscription")
+		return true
+	}
+	return false
 }
