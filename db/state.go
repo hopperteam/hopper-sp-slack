@@ -14,14 +14,30 @@ type dbState struct {
 	Value string `bson:"value,omitempty"`
 }
 
+func (state *dbState) key() bson.M {
+	return bson.M{ "key": state.Key }
+}
+
+func (state *dbState) update() bson.M {
+	update := bson.M{}
+	if state.Value != "" {
+		update["value"] = state.Value
+	}
+	return update
+}
+
 func UpsertState(key string, value string) {
 	ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
 
+	state := &dbState{
+		Key: key,
+		Value: value,
+	}
 	_, err := stateCollection.UpdateOne(
 		ctx,
-		bson.M{ "key": key },
+		state.key(),
 		bson.D{ 
-			{ "$set", bson.D{{ "value", value }}},
+			{ "$set", state.update()},
 		},
 		upsertOpt,
 	)
@@ -34,10 +50,10 @@ func UpsertState(key string, value string) {
 func SelectState(key string) string {
 	ctx, _ := context.WithTimeout(context.Background(), 2*time.Second)
 
-	state := &dbState{}
+	state := &dbState{Key: key}
 	err := stateCollection.FindOne(
 		ctx,
-		bson.M{ "key": key },
+		state.key(),
 		).Decode(state)
 
 	if err != nil && !emptyResult(err) {
