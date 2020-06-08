@@ -58,7 +58,7 @@ func SelectState(key string) string {
 		).Decode(state)
 
 	if err != nil {
-		if !strings.Contains(err.Error(), "mongo: no documents in result") {
+		if !emptyResult(err) {
 			logger.Fatal(err)
 		} else {
 			CreateState(key, "")

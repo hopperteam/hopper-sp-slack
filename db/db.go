@@ -44,3 +44,7 @@ func createIndex(col *mongo.Collection, keys bson.M) {
 		logger.Fatal(err)
 	}
 }
+
+func emptyResult(err error) bool {
+	return strings.Contains(err.Error(), "mongo: no documents in result")
+}
