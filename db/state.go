@@ -9,9 +9,9 @@ import (
 )
 
 type dbState struct {
-	Id primitive.ObjectID `bson:"_id"`
-	Key string `bson:"key"`
-	Value string `bson:"value"`
+	Id primitive.ObjectID `bson:"_id,omitempty"`
+	Key string `bson:"key,omitempty"`
+	Value string `bson:"value,omitempty"`
 }
 
 func UpsertState(key string, value string) {
