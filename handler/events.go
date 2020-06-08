@@ -8,8 +8,6 @@ import (
 	"sp-slack/utils"
 )
 
-//var api = slack.New(os.Getenv("BU_OAUTH_ACCESS"), slack.OptionDebug(true))
-
 func HandleEvents(w http.ResponseWriter, r *http.Request) {
 	logger.Info("event triggered")
 	eventsAPIEvent, err := parseEvent(r)
