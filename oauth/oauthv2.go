@@ -19,6 +19,8 @@ func GenerateButtonUrl() string {
 		"im:history",
 		"mpim:history",
 		"commands",
+		"team:read",
+		"identity.team",
 	}
 
 	var params = url.Values{
