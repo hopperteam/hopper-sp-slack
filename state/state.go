@@ -13,5 +13,5 @@ func GetAppStr() string {
 }
 
 func SetAppStr(value string) {
-	db.UpdateState(appStrKey, value)
+	db.UpsertState(appStrKey, value)
 }

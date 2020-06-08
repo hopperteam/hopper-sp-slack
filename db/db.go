@@ -1,17 +1,20 @@
 package db
 
 import (
+	"strings"
 	"context"
+	"time"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/bson"
-	"time"
 	"sp-slack/logger"
 	"sp-slack/config"
 )
 
 var database *mongo.Database
 var stateCollection *mongo.Collection
+
+var upsertOpt = options.Update().SetUpsert(true)
 
 func ConnectDB() {
 	dbOptions := options.Client().ApplyURI(config.DbConStr)
