@@ -5,34 +5,63 @@ import (
 	"sp-slack/logger"
 )
 
-var apiCache = make(map[string]*slack.Client)
+var teamApiCache = make(map[string]*slack.Client)
+var userApiCache = make(map[string]*slack.Client)
 
 func initApiCache() {
 	teams, err := selectTeams()
 	if err == nil {
 		for _, team := range *teams {
-			apiCache[team.TeamId] = createApi(team.Token)
+			teamApiCache[team.TeamId] = _createApi(team.Token)
+		}
+	}
+	users, err := selectUsers()
+	if err == nil {
+		for _, user := range *users {
+			if user.Token != "" {
+				userApiCache[user.SlackId] = _createApi(user.Token)
+			}
 		}
 	}
 }
 
-func getApi(teamId string) *slack.Client {
-	api, ok := apiCache[teamId]
+func getTeamApi(teamId string) *slack.Client {
+	api, ok := teamApiCache[teamId]
 	if !ok {
-		api = _addApi(teamId)		
+		api = _addTeamApi(teamId)		
 	}
 	return api
 }
 
-func _addApi(teamId string) *slack.Client {
+func getUserApi(slackId string) *slack.Client {
+	api, ok := userApiCache[slackId]
+	if !ok {
+		api = _addUserApi(slackId)		
+	}
+	return api
+}
+
+func _addTeamApi(teamId string) *slack.Client {
 	team, err := selectTeam(teamId)
 	if err != nil {
 		logger.Error(err)
 		return nil
 	}
-	return createApi(team.Token)
+	return _createApi(team.Token)
 }
 
-func createApi(token string) *slack.Client {
+func _addUserApi(slackId string) *slack.Client {
+	user, err := selectUser(slackId)
+	if err != nil {
+		logger.Error(err)
+		return nil
+	}
+	if user.Token == "" {
+		return nil
+	}
+	return _createApi(user.Token)
+}
+
+func _createApi(token string) *slack.Client {
 	return slack.New(token, slack.OptionDebug(true))
 }

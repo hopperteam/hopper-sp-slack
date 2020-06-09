@@ -1,6 +1,7 @@
 package db
 
 import (
+	"errors"
 	"context"
 	"time"
 	"go.mongodb.org/mongo-driver/bson"
@@ -8,12 +9,18 @@ import (
 	"sp-slack/logger"
 )
 
+var unknownTeam = errors.New("unknown team")
+
 type dbTeam struct {
 	Id primitive.ObjectID `bson:"_id,omitempty"`
 	TeamId string `bson:"teamId,omitempty"`
 	Token string `bson:"token,omitempty"`
 	Name string `bson:"name,omitempty"`
-	Users []string `bson:"users,omitempty"`
+}
+
+type Team struct {
+	TeamId string
+	Name string
 }
 
 func (team *dbTeam) key() bson.M {
@@ -28,10 +35,19 @@ func (team *dbTeam) update() bson.M {
 	if team.Name != "" {
 		update["name"] = team.Name
 	}
-	if len(team.Users) > 0 {
-		update["users"] = team.Users
-	}
 	return update
+}
+
+func (team *dbTeam) toPrimitiveTeam() (*Team) {
+	return &Team{
+		TeamId : team.TeamId,
+		Name: team.Name,
+	}
+}
+
+func SelectTeam(teamId string) (*Team, error) {
+	team, err := selectTeam(teamId)
+	return team.toPrimitiveTeam(), err
 }
 
 func selectTeam(teamId string) (*dbTeam, error) {
@@ -67,7 +83,7 @@ func selectTeams() (*[]dbTeam, error) {
 }
 
 // forfeits when it can't upsert auth details
-func PersistTeam(teamId string, token string) bool {
+func PersistTeamAccess(teamId string, token string) bool {
 	var ok = true
 
 	err := updateTeamAuth(teamId, token)
@@ -112,7 +128,10 @@ func updateTeamAuth(teamId string, token string) error {
 }
 
 func updateTeamDetails(teamId string) error {
-	api := getApi(teamId)
+	api := getTeamApi(teamId)
+	if api == nil {
+		return unknownTeam
+	}
 	slackTeam, err := api.GetTeamInfo()
 	if err != nil {
 		return err
@@ -127,9 +146,10 @@ func updateTeamDetails(teamId string) error {
 }
 
 func updateTeamMembers(teamId string) error {
-	var ids []string
-
-	api := getApi(teamId)
+	api := getTeamApi(teamId)
+	if api == nil {
+		return unknownTeam
+	}
 	users, err := api.GetUsers()
 	if err != nil {
 		return err
@@ -137,16 +157,8 @@ func updateTeamMembers(teamId string) error {
 	for _, user := range users {
 		err = upsertUser(newUser(&user))
 		if err != nil {
-			logger.Error(err)
-			break
+			return err
 		}
-		ids = append(ids, user.ID)
 	}
-	
-	team := &dbTeam{
-		TeamId: teamId,
-		Users: ids,
-	}
-
-	return upsertTeam(team)
+	return nil
 }

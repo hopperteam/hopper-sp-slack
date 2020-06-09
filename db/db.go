@@ -15,6 +15,7 @@ var database *mongo.Database
 var stateCollection *mongo.Collection
 var userCollection *mongo.Collection
 var teamCollection *mongo.Collection
+var channelCollection *mongo.Collection
 
 type entity interface {
 	key() bson.M
@@ -51,10 +52,12 @@ func initCollections() {
 	stateCollection = database.Collection("state")
 	userCollection = database.Collection("user")
 	teamCollection = database.Collection("team")
+	channelCollection = database.Collection("channel")
 
 	createIndex(stateCollection, bson.M{ "key": 1 })
 	createIndex(userCollection, bson.M{ "slackId": 1 })
 	createIndex(teamCollection, bson.M{ "teamId": 1 })
+	createIndex(channelCollection, bson.M{ "channelId": 1 })
 }
 
 func createIndex(col *mongo.Collection, keys bson.M) {

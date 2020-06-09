@@ -12,20 +12,30 @@ import (
 
 var client *http.Client = &http.Client{}
 
-func GenerateButtonUrl() string {
-	var scopes = []string{
-		"channels:history",
-		"groups:history",
-		"im:history",
-		"mpim:history",
-		"commands",
-		"team:read",
-		"identity.team",
-	}
+var scopes = []string{
+	"channels:history",
+	"channels:read",
+	"groups:history",
+	"groups:read",
+	"im:history",
+	"im:read",
+	"mpim:history",
+	"mpim:read",
+	"team:read",
+	"users:read",
+	"chat:write",
+	"commands",
+}
 
+var userScopes = []string{
+	"chat:write",
+}
+
+func GenerateButtonUrl() string {
 	var params = url.Values{
 		"client_id":    {config.ClientId},
 		"scope":        {strings.Join(scopes, " ")},
+		"user_scope":   {strings.Join(userScopes, " ")},
 		"redirect_uri": {config.BaseUrl + "/redirect"},
 		"state":        {"test"},
 	}

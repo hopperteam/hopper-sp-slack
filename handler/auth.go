@@ -23,10 +23,19 @@ func Redirect(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ok := db.PersistTeam(response.Team.ID, response.AccessToken)
+	ok := db.PersistTeamAccess(response.Team.ID, response.AccessToken)
 	if !ok {
 		utils.SendPlainText("Could not gather workspace information", w)
 		return
+	}
+
+	if (response.AuthedUser.AccessToken != "") {
+		ok = db.PersistUserAccess(response.AuthedUser.ID, response.AuthedUser.AccessToken)
+		if !ok {
+			logger.Warn("could not persist user access")
+		}
+	} else {
+		logger.Warn("did not get user authentication")
 	}
 
 	utils.SendPlainText("Success", w)
