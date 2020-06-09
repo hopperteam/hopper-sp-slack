@@ -12,12 +12,13 @@ import (
 var genericError string = "an error occured"
 
 func HandleCommand(w http.ResponseWriter, r *http.Request) {
-	logger.Info("subscription endpoint hit")
 	s, err := parseCommand(r)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
+
+	logger.Infof("received command %s", s.Command)
 
 	user, err := db.SelectUser(s.UserID)
 	if err != nil {
@@ -41,23 +42,25 @@ func Callback(w http.ResponseWriter, r *http.Request) {
 	sub, err := hopper.ParseSubscribeResponse(r)
 	if err != nil {
 		logger.Error(err)
+		utils.SendPlainText("Did not create subscription", w)
 		return
 	}
 
 	if hasUserActiveSubscription(sub.UserId) {
-		// inform user that they need only one
-		// or delete created subscription
+		utils.SendPlainText("Can't have more than one Slack subscription", w)
 		return
 	}
-
 
 	err = db.AddSubscriptionToUser(sub.UserId, sub.SubscriptionId)
 	if err != nil {
 		logger.Error(err)
+		utils.SendPlainText(genericError, w)
 		return
 	}
 
-	w.Write([]byte("Top"))
+	logger.Infof("added subscription for user %s", sub.UserId)
+
+	utils.SendPlainText("Success", w)
 }
 
 func subscribe(user *db.User, w http.ResponseWriter) {
@@ -77,6 +80,9 @@ func unsubscribe(user *db.User, w http.ResponseWriter) {
 		logger.Error(err)
 		msg = genericError
 	}
+
+	logger.Infof("removed subscription for user %s", user.SlackId)
+
 	utils.SendEquemeral(msg, w)
 }
 

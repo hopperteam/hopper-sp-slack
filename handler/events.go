@@ -51,7 +51,7 @@ func handleUrlVerification(event slackevents.EventsAPIEvent, w http.ResponseWrit
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 	w.Header().Set("Content-Type", "text")
-	w.Write([]byte(uvEvent.Challenge))
+	utils.SendPlainText(uvEvent.Challenge, w)
 }
 
 func handleInnerEvent(event slackevents.EventsAPIInnerEvent) {

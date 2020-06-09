@@ -37,3 +37,8 @@ func SendEquemeral(text string, w http.ResponseWriter) {
 		Text: text,
 	})
 }
+
+func SendPlainText(text string, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte(text))
+}
