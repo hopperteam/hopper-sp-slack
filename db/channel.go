@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"github.com/slack-go/slack"
+	"sp-slack/logger"
 )
 
 type dbChannel struct {
@@ -39,9 +40,26 @@ func (channel *dbChannel) update() bson.M {
 func newChannel(slackChannel *slack.Channel) *dbChannel {
 	return &dbChannel{
 		ChannelId: slackChannel.ID,
-		Name: slackChannel.Name,
+		Name: getChannelName(slackChannel),
 		Members: slackChannel.Members,
 	}
+}
+
+func getChannelName(slackChannel *slack.Channel) string {
+	if slackChannel.IsChannel {
+		return slackChannel.Name
+	}
+	if slackChannel.IsIM {
+		return "direct message"
+	}
+	if slackChannel.IsMpIM {
+		return "group chat"
+	}
+	// check this last as MpIM also have IsGroup set to true
+	if slackChannel.IsGroup {
+		return slackChannel.Name
+	}
+	return "unknown"
 }
 
 func (channel *dbChannel) toPrimitiveChannel() (*Channel) {
@@ -79,11 +97,59 @@ func SelectChannel(channelId string) (*Channel, error) {
 	return channel.toPrimitiveChannel(), err
 }
 
-func addChannelMembers(channel *slack.Channel, channelId string) error {
-	api := getUserApi(channelId)
+func PersistPublicChannels(teamId string) bool {
+	api := getTeamApi(teamId)
 	if api == nil {
-		return unauthedUser
+		return false
 	}
+	err := persistChannels(api)
+	if err != nil {
+		logger.Error(err)
+		return false
+	}
+	return true
+}
+
+func PersistAllChannels(slackId string) bool {
+	api := getUserApi(slackId)
+	if api == nil {
+		return false
+	}
+	err := persistChannels(api)
+	if err != nil {
+		logger.Error(err)
+		return false
+	}
+	return true
+}
+
+func persistChannels(api *slack.Client) error {
+	convs, _, err := api.GetConversations(&slack.GetConversationsParameters{
+		ExcludeArchived: "true",
+		Types: []string{
+			"public_channel",
+			"private_channel",
+			"mpim",
+			"im",
+		},
+	})
+	if err != nil {
+		return err
+	}
+	for _, conv := range convs {
+		err = addChannelMembers(&conv, api)
+		if err != nil {
+			return err
+		}
+		err = upsertChannel(newChannel(&conv))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func addChannelMembers(channel *slack.Channel, api *slack.Client) error {
 	members, _, err := api.GetUsersInConversation(&slack.GetUsersInConversationParameters {
 		ChannelID: channel.ID,
 	})

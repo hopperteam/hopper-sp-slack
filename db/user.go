@@ -117,21 +117,14 @@ func selectUsers() (*[]dbUser, error) {
 	return users, err
 }
 
-func PersistUserAccess(slackId string, token string) bool {
-	var ok = true
-
+func PersistUserAuth(slackId string, token string) bool {
 	err := updateUserAuth(slackId, token)
 	if err != nil {
 		logger.Error(err)
 		return false
 	}
-	err = updateKnownChannels(slackId)
-	if err != nil {
-		logger.Error(err)
-		ok = false
-	}
 
-	return ok
+	return true
 }
 
 func updateUserAuth(slackId string, token string) error {
@@ -139,36 +132,6 @@ func updateUserAuth(slackId string, token string) error {
 		SlackId: slackId,
 		Token: token,
 	})
-}
-
-func updateKnownChannels(slackId string) error {
-	api := getUserApi(slackId)
-	if api == nil {
-		return unauthedUser
-	}
-	convs, _, err := api.GetConversations(&slack.GetConversationsParameters{
-		ExcludeArchived: "true",
-		Types: []string{
-			"public_channel",
-			"private_channel",
-			"mpim",
-			"im",
-		},
-	})
-	if err != nil {
-		return err
-	}
-	for _, conv := range convs {
-		err = addChannelMembers(&conv, slackId)
-		if err != nil {
-			return err
-		}
-		err = upsertChannel(newChannel(&conv))
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func AddSubscriptionToUser(slackId string, subscription string) error {

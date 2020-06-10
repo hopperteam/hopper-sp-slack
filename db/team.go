@@ -83,7 +83,7 @@ func selectTeams() (*[]dbTeam, error) {
 }
 
 // forfeits when it can't upsert auth details
-func PersistTeamAccess(teamId string, token string) bool {
+func PersistTeam(teamId string, token string) bool {
 	var ok = true
 
 	err := updateTeamAuth(teamId, token)
