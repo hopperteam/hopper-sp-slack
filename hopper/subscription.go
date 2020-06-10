@@ -3,7 +3,6 @@ package hopper
 import (
 	"net/http"
 	"errors"
-	"github.com/gorilla/schema"
 	hopperApi "github.com/hopperteam/hopper-api/golang"
 	"sp-slack/config"
 )
@@ -28,8 +27,6 @@ type Subscription struct {
 	SubscriptionId string
 	UserId string
 }
-
-var schemaDecoder = schema.NewDecoder()
 
 func ParseSubscribeResponse(r *http.Request) (*Subscription, error) {
 	var res callbackResponse

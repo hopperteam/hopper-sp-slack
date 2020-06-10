@@ -1,6 +1,8 @@
 package handler
 
-import (	
+import (
+	"net/http"
+	"github.com/slack-go/slack"
 	"github.com/slack-go/slack/slackevents"
 	"sp-slack/logger"
 	"sp-slack/db"
@@ -19,10 +21,27 @@ func processMessage(messageEvent *slackevents.MessageEvent, teamId string) {
 	sendNotifications(messageEvent, teamId)
 }
 
+func HandleReply(w http.ResponseWriter, r *http.Request) {
+	reply, err := hopper.ParseReply(r)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	api := db.GetUserApi(reply.UserId)
+	if api == nil {
+		logger.Error("user did not authorize bot")
+		return
+	}
+	_, _, err = api.PostMessage(reply.ChannelId, slack.MsgOptionText(reply.Text, true), slack.MsgOptionAsUser(true))
+	if err != nil {
+		logger.Error(err)
+	}
+}
+
 func sendNotifications(messageEvent *slackevents.MessageEvent, teamId string) {
 	heading := createHeading(messageEvent.User, messageEvent.Channel, teamId)
 	receivers := getReceivers(messageEvent.User, messageEvent.Channel)
-	ids := hopper.SendNotifications(heading, messageEvent.Text, receivers, messageEvent.ClientMsgID)
+	ids := hopper.SendNotifications(heading, messageEvent.Text, receivers, messageEvent.Channel)
 	err := db.InsertNotifications(ids, messageEvent.ClientMsgID)
 	if err != nil {
 		logger.Error(err)

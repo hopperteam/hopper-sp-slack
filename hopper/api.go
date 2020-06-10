@@ -2,6 +2,7 @@ package hopper
 
 import (
 	hopperApi "github.com/hopperteam/hopper-api/golang"
+	"github.com/gorilla/schema"
 	"sp-slack/logger"
 	"sp-slack/state"
 	"sp-slack/config"
@@ -9,6 +10,8 @@ import (
 
 var Api *hopperApi.HopperApi
 var App *hopperApi.App
+
+var schemaDecoder = schema.NewDecoder()
 
 func InitApi() {
 	Api = hopperApi.CreateHopperApi(hopperApi.HopperDev)

@@ -2,21 +2,20 @@ package hopper
 
 import (
 	"net/url"
-	//"net/http"
-	//"errors"
-	//"github.com/gorilla/schema"
+	"net/http"
 	hopperApi "github.com/hopperteam/hopper-api/golang"
 	"sp-slack/config"
 	"sp-slack/logger"
+	"sp-slack/utils"
 )
 
 type Receivers map[string]string
 
-func SendNotifications(heading string, content string, receivers Receivers, messageId string) []string {
+func SendNotifications(heading string, content string, receivers Receivers, channelId string) []string {
 	var notIds []string
 
 	for id, subscription := range receivers {
-		callback := getCallback(id, messageId)
+		callback := getCallback(id, channelId)
 		not := hopperApi.DefaultNotification(heading, content).
 		IsDone(false).
 		Action(
@@ -55,12 +54,30 @@ func DeleteNotifications(notIds []string) {
 	}
 }
 
-var baseCallback = config.BaseUrl + "/reply?"
-
-func getCallback(userId string, messageId string) string {
+func getCallback(userId string, channelId string) string {
+	baseCallback := config.BaseUrl + "/reply?"
 	params := url.Values{
 		"userId": {userId},
-		"messageId": {messageId},
+		"channelId": {channelId},
 	}
 	return baseCallback + params.Encode()
+}
+
+type Reply struct {
+	UserId string `schema:"userId"`
+	ChannelId string `schema:"channelId"`
+	Text string `json:"text"`
+}
+
+func ParseReply(r *http.Request) (*Reply, error) {
+	var reply Reply
+	err := schemaDecoder.Decode(&reply, r.URL.Query())
+	if err != nil {
+		return nil, err
+	}
+	err = utils.ParseJSONReq(r, &reply)
+	if err != nil {
+		return nil, err
+	}
+	return &reply, nil
 }
