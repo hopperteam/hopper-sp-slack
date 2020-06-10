@@ -98,7 +98,7 @@ func SelectChannel(channelId string) (*Channel, error) {
 }
 
 func PersistPublicChannels(teamId string) bool {
-	api := getTeamApi(teamId)
+	api := GetTeamApi(teamId)
 	if api == nil {
 		return false
 	}
@@ -111,7 +111,7 @@ func PersistPublicChannels(teamId string) bool {
 }
 
 func PersistAllChannels(slackId string) bool {
-	api := getUserApi(slackId)
+	api := GetUserApi(slackId)
 	if api == nil {
 		return false
 	}

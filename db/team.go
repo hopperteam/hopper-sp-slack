@@ -128,7 +128,7 @@ func updateTeamAuth(teamId string, token string) error {
 }
 
 func updateTeamDetails(teamId string) error {
-	api := getTeamApi(teamId)
+	api := GetTeamApi(teamId)
 	if api == nil {
 		return unknownTeam
 	}
@@ -146,7 +146,7 @@ func updateTeamDetails(teamId string) error {
 }
 
 func updateTeamMembers(teamId string) error {
-	api := getTeamApi(teamId)
+	api := GetTeamApi(teamId)
 	if api == nil {
 		return unknownTeam
 	}

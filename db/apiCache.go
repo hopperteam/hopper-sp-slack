@@ -25,7 +25,7 @@ func initApiCache() {
 	}
 }
 
-func getTeamApi(teamId string) *slack.Client {
+func GetTeamApi(teamId string) *slack.Client {
 	api, ok := teamApiCache[teamId]
 	if !ok {
 		api = _addTeamApi(teamId)		
@@ -33,7 +33,7 @@ func getTeamApi(teamId string) *slack.Client {
 	return api
 }
 
-func getUserApi(slackId string) *slack.Client {
+func GetUserApi(slackId string) *slack.Client {
 	api, ok := userApiCache[slackId]
 	if !ok {
 		api = _addUserApi(slackId)		
