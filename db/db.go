@@ -16,6 +16,7 @@ var stateCollection *mongo.Collection
 var userCollection *mongo.Collection
 var teamCollection *mongo.Collection
 var channelCollection *mongo.Collection
+var notificationCollection *mongo.Collection
 
 type entity interface {
 	key() bson.M
@@ -53,17 +54,19 @@ func initCollections() {
 	userCollection = database.Collection("user")
 	teamCollection = database.Collection("team")
 	channelCollection = database.Collection("channel")
+	notificationCollection = database.Collection("notification")
 
-	createIndex(stateCollection, bson.M{ "key": 1 })
-	createIndex(userCollection, bson.M{ "slackId": 1 })
-	createIndex(teamCollection, bson.M{ "teamId": 1 })
-	createIndex(channelCollection, bson.M{ "channelId": 1 })
+	createIndex(stateCollection, bson.M{ "key": 1 }, true)
+	createIndex(userCollection, bson.M{ "slackId": 1 }, true)
+	createIndex(teamCollection, bson.M{ "teamId": 1 }, true)
+	createIndex(channelCollection, bson.M{ "channelId": 1 }, true)
+	createIndex(notificationCollection, bson.M{ "msgId": 1 }, false)
 }
 
-func createIndex(col *mongo.Collection, keys bson.M) {
+func createIndex(col *mongo.Collection, keys bson.M, unique bool) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	_, err := col.Indexes().CreateOne(ctx, mongo.IndexModel{
-		Options: options.Index().SetUnique(true),
+		Options: options.Index().SetUnique(unique),
 		Keys: keys,
 	})
 

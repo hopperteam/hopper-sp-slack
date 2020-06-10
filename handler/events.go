@@ -23,7 +23,7 @@ func HandleEvents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if eventsAPIEvent.Type == slackevents.CallbackEvent {
-		handleInnerEvent(eventsAPIEvent.InnerEvent)
+		handleInnerEvent(eventsAPIEvent.InnerEvent, eventsAPIEvent.TeamID)
 		return
 	}
 }
@@ -54,9 +54,11 @@ func handleUrlVerification(event slackevents.EventsAPIEvent, w http.ResponseWrit
 	utils.SendPlainText(uvEvent.Challenge, w)
 }
 
-func handleInnerEvent(event slackevents.EventsAPIInnerEvent) {
+func handleInnerEvent(event slackevents.EventsAPIInnerEvent, teamId string) {
 	switch event.Data.(type) {
 	case *slackevents.MessageEvent:
-		logger.Infof("%+v", event.Data)
+		messageEvent := event.Data.(*slackevents.MessageEvent)
+		processMessage(messageEvent, teamId)
+		break
 	}
 }
