@@ -28,6 +28,10 @@ var scopes = []string{
 }
 
 var userScopes = []string{
+	"channels:read",
+	"groups:read",
+	"im:read",
+	"mpim:read",
 	"chat:write",
 }
 
