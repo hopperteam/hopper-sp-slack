@@ -22,6 +22,9 @@ func processMessage(messageEvent *slackevents.MessageEvent, teamId string) {
 }
 
 func HandleReply(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "content-type")
+	w.Header().Set("Access-Control-Allow-Methods", "POST")
 	reply, err := hopper.ParseReply(r)
 	if err != nil {
 		logger.Error(err)
