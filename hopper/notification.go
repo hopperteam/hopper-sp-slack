@@ -19,7 +19,7 @@ func SendNotifications(heading string, content string, receivers Receivers, chan
 		not := hopperApi.DefaultNotification(heading, content).
 		IsDone(false).
 		Action(
-			hopperApi.TextAction("Reply", callback),
+			hopperApi.TextAction("Reply", callback).MarkAsDone(true),
 		)
 
 		notId, err := Api.PostNotification(subscription, not)
