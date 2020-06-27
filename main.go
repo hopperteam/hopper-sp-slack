@@ -41,7 +41,7 @@ func createServer() *http.Server {
 func startServer(server *http.Server) {
 	var err error
 	go func() {
-		logger.Infof("startign server on port: %s", config.Port)
+		logger.Infof("starting server on port: %s", config.Port)
 		if err = server.ListenAndServe(); err != nil {
 			logger.Fatal(err)
 		}
