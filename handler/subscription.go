@@ -31,7 +31,7 @@ func HandleCommand(w http.ResponseWriter, r *http.Request) {
 		subscribe(user, w)
 		break
 	case "/unsubscribe":
-		subscribe(user, w)
+		unsubscribe(user, w)
 		break
 	default:
 		logger.Warnf("received unsupported command %s", s.Command)
