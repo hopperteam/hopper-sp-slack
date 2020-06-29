@@ -14,7 +14,7 @@ var App *hopperApi.App
 var schemaDecoder = schema.NewDecoder()
 
 func InitApi() {
-	Api = hopperApi.CreateHopperApi(hopperApi.HopperDev)
+	Api = hopperApi.CreateHopperApi(hopperApi.HopperProd)
 
 	ok, err := Api.CheckConnectivity()
 	if !ok {
